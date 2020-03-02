@@ -1,3 +1,5 @@
+package com.mycompany.myproject;
+
 import java.sql.*;
 public class DBUtil {
     private static Connection conn;
