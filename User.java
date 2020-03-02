@@ -1,3 +1,5 @@
+package com.mycompany.myproject;
+
 
 public class User {
     String usrname;
