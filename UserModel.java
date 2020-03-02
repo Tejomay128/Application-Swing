@@ -1,3 +1,6 @@
+package com.mycompany.myproject;
+
+
 import java.util.*;
 import javax.swing.table.AbstractTableModel;
 public class UserModel extends AbstractTableModel       
