@@ -1,8 +1,11 @@
+package com.mycompany.myproject;
+
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,12 +41,11 @@ public class UserDB {
     
     public static void delete(User user){
         try {
-            String sql = "DELETE FROM user " + "WHERE email=?";
+            String sql = "DELETE FROM user " + "WHERE email = '" + user.getEmail() + "'";
             Connection conn = DBUtil.getConn();
             
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(3,user.getEmail());
-            ps.executeUpdate();
+            Statement statement = conn.createStatement();
+            int r = statement.executeUpdate(sql);
         } catch (SQLException ex) {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         }
