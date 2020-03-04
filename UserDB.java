@@ -50,4 +50,20 @@ public class UserDB {
             Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static void add(User user){
+        try {
+            String sql = "INSERT INTO user (usrname,age,email,passwd,phoneno) VALUES (?,?,?,?,?)";
+            Connection conn = DBUtil.getConn();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1,user.getUsrname());
+            ps.setInt(2,user.getAge());
+            ps.setString(3,user.getEmail());
+            ps.setString(4,user.getPasswd());
+            ps.setString(5,user.getPhoneno());
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
