@@ -1,8 +1,16 @@
-package com.mycompany.myproject;
 
-import java.awt.*;
-import java.awt.event.*;
+package com.mycompany.myproject.regAndLogin;
 import javax.swing.*;
+import java.awt.*;
+import com.mycompany.myproject.*;
+import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 class Admin {
 	//@SuppressWarnings("deprecation")
@@ -11,14 +19,14 @@ class Admin {
 		//JFrame frame=new JFrame("Food Delivery Application");
 		JPanel panel1=new JPanel();
 		
-		JLabel l1=new JLabel("Username:");
+		JLabel l1=new JLabel("Email:");
 		JLabel l2=new JLabel("Password:");
 		
 		JLabel l3=new JLabel("Admin Login Window");
 		JTextField t1=new JTextField(20);
 		JPasswordField t2=new JPasswordField(20);
 		JButton b1=new JButton("Login");
-		String username, password;
+		
 		frame.setSize(500,500);
 		frame.setLocationByPlatform(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,11 +41,31 @@ class Admin {
 		//t2.setColumns(100);
 		t2.setEditable(true);
 		t2.setEnabled(true);
-		username=t1.getText();
-		password=String.valueOf(t2.getPassword());
 		
-		b1.addActionListener((ActionEvent e) -> {
-			//add code for verifying login credentials
+		b1.addActionListener((ActionEvent) -> {
+                    //add code for verifying login credentials
+                    String email=t1.getText();
+                    String password=String.valueOf(t2.getPassword());
+                    TableModel tableFrame = new TableModel("User Details");
+
+                    try{
+                        Connection conn = DBUtil.getConn();
+                        String sql = "SELECT * FROM admin " + "WHERE email=? and passwd=?";
+                        PreparedStatement ps = conn.prepareStatement(sql);
+                        ps.setString(1, email);
+                        ps.setString(2, password);
+                        ResultSet rs = ps.executeQuery();
+                        if(rs.next()){
+                            tableFrame.setVisible(true);
+                            frame.setVisible(false);
+                        }    
+                        else{
+                            JOptionPane.showMessageDialog(frame,"Incorrect Email or Password","Error",JOptionPane.ERROR_MESSAGE);
+                        }
+                    }catch(SQLException ex){
+                        Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+                    }    
+                    
 		});
 		frame.add(panel1);
 		panel1.setLayout(new GridBagLayout());
@@ -104,7 +132,7 @@ class User1 {
 			frame.remove(panel);
 			frame.setVisible(false);
 			JPanel panel1=new JPanel();
-			JLabel lb1=new JLabel("Username:");
+			JLabel lb1=new JLabel("Email:");
 			JLabel lb2=new JLabel("Password:");
 			
 			JLabel lb3=new JLabel("User Login Window");
@@ -318,10 +346,30 @@ class User1 {
 	}
 }
 
+public class Menu extends JFrame {
+       
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+    private void initComponents() {
 
-public class Menu {
-	public static void main(String[] args) {
-		JFrame.setDefaultLookAndFeelDecorated(true);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>                        
+
+    public static void main(String args[]) {
+        JFrame.setDefaultLookAndFeelDecorated(true);
 		JFrame frame=new JFrame("Food Delivery Application");
 		JPanel panel=new JPanel();
 		JButton b1=new JButton("Admin");
@@ -330,7 +378,6 @@ public class Menu {
 		JLabel l2=new JLabel("Please select required option:");
 		
 		JLabel l3=new JLabel();
-		
 		frame.setSize(500,500);
 		frame.setLocationByPlatform(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -385,6 +432,8 @@ public class Menu {
 		
 		//add all elements to panel before setting frame as visible
 		frame.setVisible(true);
-	}
-	
+    }
+
+    // Variables declaration - do not modify                     
+    // End of variables declaration                   
 }
