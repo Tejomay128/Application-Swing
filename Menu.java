@@ -1,8 +1,7 @@
+package com.mycompany.myproject;
 
-package com.mycompany.myproject.regAndLogin;
 import javax.swing.*;
 import java.awt.*;
-import com.mycompany.myproject.*;
 import java.awt.event.ActionEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.*;
 
 class Admin {
 	//@SuppressWarnings("deprecation")
@@ -27,9 +27,9 @@ class Admin {
 		JPasswordField t2=new JPasswordField(20);
 		JButton b1=new JButton("Login");
 		
-		frame.setSize(500,500);
-		frame.setLocationByPlatform(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setSize(500,500);
+		//frame.setLocationByPlatform(true);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch(ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
@@ -65,7 +65,7 @@ class Admin {
                     }catch(SQLException ex){
                         Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
                     }    
-                    
+                  
 		});
 		frame.add(panel1);
 		panel1.setLayout(new GridBagLayout());
@@ -118,9 +118,9 @@ class User1 {
 		
 		JLabel l3=new JLabel();
 		
-		frame.setSize(500,500);
-		frame.setLocationByPlatform(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setSize(500,500);
+		//frame.setLocationByPlatform(true);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch(ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException e) {
@@ -139,10 +139,10 @@ class User1 {
 			JTextField tf1=new JTextField(20);
 			JPasswordField tf2=new JPasswordField(20);
 			JButton bt1=new JButton("Login");
-			String username, password;
-			frame.setSize(500,500);
-			frame.setLocationByPlatform(true);
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			//String username, password;
+			//frame.setSize(500,500);
+			//frame.setLocationByPlatform(true);
+			//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			try {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			} catch(ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ev) {
@@ -154,11 +154,12 @@ class User1 {
 			//t2.setColumns(100);
 			tf2.setEditable(true);
 			tf2.setEnabled(true);
-			username=tf1.getText();
-			password=String.valueOf(tf2.getPassword());
+			
 			
 			bt1.addActionListener((ActionEvent ev) -> {
 				//add code for verifying login credentials
+				String email=tf1.getText();
+				String password=String.valueOf(tf2.getPassword());
 			});
 			frame.add(panel1);
 			panel1.setLayout(new GridBagLayout());
@@ -209,16 +210,18 @@ class User1 {
 			JLabel lb4=new JLabel("Password:");
 			JLabel lb5=new JLabel("Phone number:");
 			JLabel lb6=new JLabel("User Register Window");
+			JLabel lb7=new JLabel("Re-enter Password:");
 			JTextField tf1=new JTextField(20);
 			JTextField tf2=new JTextField(20);
 			JTextField tf3=new JTextField(20);
 			JPasswordField tf4=new JPasswordField(20);
+			JPasswordField tf6=new JPasswordField(20);
 			JTextField tf5=new JTextField(20);
 			JButton bt1=new JButton("Register");
-			String username, password, age, email, phoneno;
-			frame.setSize(500,500);
-			frame.setLocationByPlatform(true);
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			
+			//frame.setSize(500,500);
+			//frame.setLocationByPlatform(true);
+			//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			try {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			} catch(ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ev) {
@@ -236,13 +239,45 @@ class User1 {
 			tf4.setEnabled(true);
 			tf5.setEditable(true);
 			tf5.setEnabled(true);
-			username=tf1.getText();
-			age=tf2.getText();
-			email=tf3.getText();
-			password=String.valueOf(tf4.getPassword());
-			phoneno=tf5.getText();
+			
 			bt1.addActionListener((ActionEvent ev) -> {
 				//add code for updating database
+				//add code for validating credentials
+				
+				String username, password1, password2, email;
+				int age, phoneno;
+				username=tf1.getText();
+				try {
+					age=Integer.parseInt(tf2.getText());
+					if(age<18 || age>120) {
+						JOptionPane.showMessageDialog(frame, "Age is not valid", "Error!", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				catch(NumberFormatException exp) {
+					JOptionPane.showMessageDialog(frame, "Age is not valid", "Error!", JOptionPane.ERROR_MESSAGE);
+				}
+				email=tf3.getText();
+				password1=String.valueOf(tf4.getPassword());
+				password2=String.valueOf(tf6.getPassword());
+				try {
+					phoneno=Integer.parseInt(tf5.getText());
+					if(tf5.getText().length() !=10) {
+						JOptionPane.showMessageDialog(frame, "Phone number is not valid", "Error!", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				catch(NumberFormatException exp) {
+					JOptionPane.showMessageDialog(frame, "Phone number is not valid", "Error!", JOptionPane.ERROR_MESSAGE);
+				}
+				if(!password1.equals(password2)) {
+					JOptionPane.showMessageDialog(frame, "Passwords do not match", "Error!", JOptionPane.ERROR_MESSAGE);
+				}
+				Pattern p=Pattern.compile("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$");
+				Matcher m=p.matcher(email);
+				if(!m.find()) {
+					JOptionPane.showMessageDialog(frame, "Email is not valid", "Error!", JOptionPane.ERROR_MESSAGE);
+				}
+						
+				
 			});
 			frame.add(panel2);
 			panel2.setLayout(new GridBagLayout());
@@ -297,14 +332,24 @@ class User1 {
 			g1.gridy=5;
 			//g.anchor=GridBagConstraints.LINE_START;
 			g1.gridwidth=1;
-			panel2.add(lb5, g1);
+			panel2.add(lb7, g1);
 			g1.gridx=1;
 			g1.gridy=5;
 			//g.anchor=GridBagConstraints.LINE_END;
 			g1.gridwidth=1;
-			panel2.add(tf5, g1);
+			panel2.add(tf6, g1);
 			g1.gridx=0;
 			g1.gridy=6;
+			//g.anchor=GridBagConstraints.LINE_START;
+			g1.gridwidth=1;
+			panel2.add(lb5, g1);
+			g1.gridx=1;
+			g1.gridy=6;
+			//g.anchor=GridBagConstraints.LINE_END;
+			g1.gridwidth=1;
+			panel2.add(tf5, g1);
+			g1.gridx=0;
+			g1.gridy=7;
 			//g.anchor=GridBagConstraints.LINE_END;
 			g1.gridwidth=2;
 			panel2.add(bt1, g1);
@@ -369,7 +414,7 @@ public class Menu extends JFrame {
     }// </editor-fold>                        
 
     public static void main(String args[]) {
-        JFrame.setDefaultLookAndFeelDecorated(true);
+        //JFrame.setDefaultLookAndFeelDecorated(true);
 		JFrame frame=new JFrame("Food Delivery Application");
 		JPanel panel=new JPanel();
 		JButton b1=new JButton("Admin");
