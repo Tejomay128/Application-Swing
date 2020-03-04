@@ -275,7 +275,7 @@ class User1 {
 				//add code for validating credentials
 				
 				String username, password1, password2, email, phoneno;
-				int age;
+                                int age=0;
                                 boolean error = false;
                                 
 				username=tf1.getText();
@@ -283,15 +283,17 @@ class User1 {
                                     JOptionPane.showMessageDialog(frame,"Username can't be empty!!!","Empty Field",JOptionPane.ERROR_MESSAGE);
                                     error = true;    
                                 }
-                                age=Integer.parseInt(tf2.getText());
+                                
                                 if(tf2.getText().isEmpty()){
                                     JOptionPane.showMessageDialog(frame,"Age can't be empty!!!","Empty Field",JOptionPane.ERROR_MESSAGE);
                                     error = true;
                                 }
                                 else{
                                     try {
-					
-                                        if(age<18 || age>120) {
+					int temp_age;
+                                        temp_age=Integer.parseInt(tf2.getText());
+                                        age = temp_age;
+                                        if(temp_age<18 || temp_age>120) {
                                             JOptionPane.showMessageDialog(frame, "Age is not valid", "Error!", JOptionPane.ERROR_MESSAGE);
                                             error = true;
                                         }
