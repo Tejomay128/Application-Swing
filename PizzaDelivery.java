@@ -7,8 +7,9 @@ import java.awt.event.ActionEvent;
 
 public class PizzaDelivery{
 	//JFrame jf=new JFrame();
+	String username;
 	JPanel jp=new JPanel();
-	JLabel l1=new JLabel("Welcome to Pizza Delivery Application!");
+
 	JLabel l2=new JLabel("Fill in the required details:");
 	JLabel l3=new JLabel("Enter delivery location:");
 	JLabel l4=new JLabel("Select restaurant:");
@@ -23,7 +24,9 @@ public class PizzaDelivery{
 	JCheckBox cb2=new JCheckBox("Non-Vegetarian");
 	JTextField t1=new JTextField(20);
 	JTextField t2=new JTextField(20);
-	public PizzaDelivery(JFrame jf) {
+	public PizzaDelivery(JFrame jf, String s) {
+		username=s;
+		JLabel l1=new JLabel("Welcome "+username+" to Pizza Delivery Application!");
 		jf.setTitle("Pizza Delivery Application");
         jf.setSize(500, 500);
         jf.setLocationByPlatform(true);
