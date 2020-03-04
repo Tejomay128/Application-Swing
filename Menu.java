@@ -1,5 +1,6 @@
-package com.mycompany.myproject;
 
+package com.mycompany.myproject.regAndLogin;
+import com.mycompany.myproject.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -157,9 +158,38 @@ class User1 {
 			
 			
 			bt1.addActionListener((ActionEvent ev) -> {
-				//add code for verifying login credentials
+				boolean error = false;
 				String email=tf1.getText();
 				String password=String.valueOf(tf2.getPassword());
+                                if(email.isEmpty()){
+                                    JOptionPane.showMessageDialog(frame, "Email can't be empty!!!");
+                                    error = true;
+                                }
+                                 if(password.isEmpty()){
+                                    JOptionPane.showMessageDialog(frame, "Password can't be empty!!!");
+                                    error = true;
+                                }
+                                //add after login frame here
+                                if(!error){
+                                    try{
+                                        Connection conn = DBUtil.getConn();
+                                        String sql = "SELECT * FROM user " + "WHERE email=? and passwd=?";
+                                        PreparedStatement ps = conn.prepareStatement(sql);
+                                        ps.setString(1, email);
+                                        ps.setString(2, password);
+                                        ResultSet rs = ps.executeQuery();
+                                        if(rs.next()){
+                                            frame.remove(panel1);
+                                            frame.setVisible(false);
+                                            PizzaDelivery pd = new PizzaDelivery(frame);
+                                        }    
+                                        else{
+                                            JOptionPane.showMessageDialog(frame,"Incorrect Email or Password","Error",JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    }catch(SQLException ex){
+                                        Logger.getLogger(UserDB.class.getName()).log(Level.SEVERE, null, ex);
+                                    }    
+                                }    
 			});
 			frame.add(panel1);
 			panel1.setLayout(new GridBagLayout());
@@ -244,39 +274,91 @@ class User1 {
 				//add code for updating database
 				//add code for validating credentials
 				
-				String username, password1, password2, email;
-				int age, phoneno;
+				String username, password1, password2, email, phoneno;
+				int age;
+                                boolean error = false;
+                                
 				username=tf1.getText();
-				try {
-					age=Integer.parseInt(tf2.getText());
-					if(age<18 || age>120) {
-						JOptionPane.showMessageDialog(frame, "Age is not valid", "Error!", JOptionPane.ERROR_MESSAGE);
-					}
-				}
-				catch(NumberFormatException exp) {
+                                if(username.isEmpty()){
+                                    JOptionPane.showMessageDialog(frame,"Username can't be empty!!!","Empty Field",JOptionPane.ERROR_MESSAGE);
+                                    error = true;    
+                                }
+                                age=Integer.parseInt(tf2.getText());
+                                if(tf2.getText().isEmpty()){
+                                    JOptionPane.showMessageDialog(frame,"Age can't be empty!!!","Empty Field",JOptionPane.ERROR_MESSAGE);
+                                    error = true;
+                                }
+                                else{
+                                    try {
+					
+                                        if(age<18 || age>120) {
+                                            JOptionPane.showMessageDialog(frame, "Age is not valid", "Error!", JOptionPane.ERROR_MESSAGE);
+                                            error = true;
+                                        }
+                                    }
+                                    catch(NumberFormatException exp) {
 					JOptionPane.showMessageDialog(frame, "Age is not valid", "Error!", JOptionPane.ERROR_MESSAGE);
-				}
-				email=tf3.getText();
+                                        error = true;
+                                    }
+                                }
+                                email=tf3.getText();
+                                if(email.isEmpty()){
+                                    JOptionPane.showMessageDialog(frame,"Email can't be empty!!!","Empty Field",JOptionPane.ERROR_MESSAGE);
+                                    error = true;
+                                }
+                                else{
+                                    Pattern p=Pattern.compile("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$");
+                                    Matcher m=p.matcher(email);
+                                    if(!m.find()) {
+					JOptionPane.showMessageDialog(frame, "Email is not valid", "Error!", JOptionPane.ERROR_MESSAGE);
+                                        error = true;
+                                    }
+                                }							
+				
 				password1=String.valueOf(tf4.getPassword());
 				password2=String.valueOf(tf6.getPassword());
-				try {
-					phoneno=Integer.parseInt(tf5.getText());
-					if(tf5.getText().length() !=10) {
-						JOptionPane.showMessageDialog(frame, "Phone number is not valid", "Error!", JOptionPane.ERROR_MESSAGE);
-					}
-				}
-				catch(NumberFormatException exp) {
+                                phoneno=tf5.getText();
+                                if(phoneno.isEmpty()){
+                                    JOptionPane.showMessageDialog(frame,"Phoneno can't be empty!!!","Empty Field",JOptionPane.ERROR_MESSAGE);
+                                    error = true;
+                                }
+                                else{
+                                    try {
+					
+                                    if(tf5.getText().length() !=10) {
 					JOptionPane.showMessageDialog(frame, "Phone number is not valid", "Error!", JOptionPane.ERROR_MESSAGE);
+                                        error = true;
+                                    }
 				}
-				if(!password1.equals(password2)) {
-					JOptionPane.showMessageDialog(frame, "Passwords do not match", "Error!", JOptionPane.ERROR_MESSAGE);
+                                    catch(NumberFormatException exp) {
+                                        JOptionPane.showMessageDialog(frame, "Phone number is not valid", "Error!", JOptionPane.ERROR_MESSAGE);
+                                        error = true;
+                                    }
+                                }
+                                if(password1.isEmpty() || password2.isEmpty()){
+                                    JOptionPane.showMessageDialog(frame,"Password can't be empty!!!","Empty Field",JOptionPane.ERROR_MESSAGE);
+                                    error = true;
+                                }
+                                else{
+                                    if(!password1.equals(password2)) {
+                                        JOptionPane.showMessageDialog(frame, "Passwords do not match", "Error!", JOptionPane.ERROR_MESSAGE);
+                                        error = true;
+                                    }				
 				}
-				Pattern p=Pattern.compile("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}$");
-				Matcher m=p.matcher(email);
-				if(!m.find()) {
-					JOptionPane.showMessageDialog(frame, "Email is not valid", "Error!", JOptionPane.ERROR_MESSAGE);
-				}
-						
+				
+				if(!error){
+                                    User user = new User();
+                                    user.setUsrname(username);
+                                    user.setAge(age);
+                                    user.setEmail(email);
+                                    user.setPasswd(password2);
+                                    user.setPhoneno(phoneno);
+                                    UserDB.add(user);
+                                    JOptionPane.showMessageDialog(frame,"User" + username + " is registered successfully");
+                                    frame.remove(panel2);
+                                    frame.setVisible(false);
+                                    PizzaDelivery pd = new PizzaDelivery(frame);
+                                }
 				
 			});
 			frame.add(panel2);
