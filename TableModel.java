@@ -25,7 +25,7 @@ public class TableModel extends JFrame {
         add(buildButtonPanel(),BorderLayout.NORTH);
         userTable = buildTable();
         add(new JScrollPane(userTable),BorderLayout.CENTER);
-        setVisible(true);
+//        setVisible(true);
     }
 
     private JPanel buildButtonPanel(){
@@ -107,9 +107,6 @@ public class TableModel extends JFrame {
         pack();
     }// </editor-fold>                        
 
-    public static void main(String args[]) {
-        TableModel frame = new TableModel("Display info");
-    }
 
  
 
