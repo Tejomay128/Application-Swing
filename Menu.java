@@ -1,5 +1,6 @@
-package com.mycompany.myproject;
 
+package com.mycompany.myproject.regAndLogin;
+import com.mycompany.myproject.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -171,23 +172,16 @@ class User1 {
                                 //add after login frame here
                                 if(!error){
                                     try{
-                                    	String s;
                                         Connection conn = DBUtil.getConn();
-                                        String sql1 = "SELECT * FROM user " + "WHERE email=? and passwd=?";
-                                        PreparedStatement ps = conn.prepareStatement(sql1);
-                                        String sql2 = "SELECT usrname FROM user " + "WHERE email=? and passwd=?";
-                                        PreparedStatement ps1=conn.prepareStatement(sql2);
+                                        String sql = "SELECT * FROM user " + "WHERE email=? and passwd=?";
+                                        PreparedStatement ps = conn.prepareStatement(sql);
                                         ps.setString(1, email);
                                         ps.setString(2, password);
-                                        ps1.setString(1,  email);
-                                        ps1.setString(2, password);
                                         ResultSet rs = ps.executeQuery();
-                                        ResultSet rs1=ps1.executeQuery();
                                         if(rs.next()){
-                                        	s=rs1.getString("usrname");
                                             frame.remove(panel1);
                                             frame.setVisible(false);
-                                            PizzaDelivery pd = new PizzaDelivery(frame, s);
+                                            PizzaDelivery pd = new PizzaDelivery(frame,rs.getString("usrname"));
                                         }    
                                         else{
                                             JOptionPane.showMessageDialog(frame,"Incorrect Email or Password","Error",JOptionPane.ERROR_MESSAGE);
@@ -362,10 +356,10 @@ class User1 {
                                     user.setPasswd(password2);
                                     user.setPhoneno(phoneno);
                                     UserDB.add(user);
-                                    JOptionPane.showMessageDialog(frame,"User " + username + " is registered successfully");
+                                    JOptionPane.showMessageDialog(frame,"User" + username + " is registered successfully");
                                     frame.remove(panel2);
                                     frame.setVisible(false);
-                                    PizzaDelivery pd = new PizzaDelivery(frame, username);
+                                    PizzaDelivery pd = new PizzaDelivery(frame,username);
                                 }
 				
 			});
