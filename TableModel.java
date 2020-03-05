@@ -1,6 +1,7 @@
 package com.mycompany.myproject;
 
 
+import com.mycompany.myproject.regAndLogin.PizzaDelivery;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
@@ -46,18 +47,9 @@ public class TableModel extends JFrame {
         JPanel panel = new JPanel();
         JButton addBtn = new JButton("add");
         addBtn.addActionListener((ActionEvent) -> {
-//            remove(buttonPanel);
-//            remove(userTable);
-            //this.setVisible(false);
             doAddBtn();
         });
         panel.add(addBtn);
-        
-/*         JButton editBtn = new JButton("edit");
-        editBtn.addActionListener((ActionEvent) -> {
-            doEditBtn();
-        });
-        panel.add(editBtn);*/
         
          JButton deleteBtn = new JButton("delete");
         deleteBtn.addActionListener((ActionEvent) -> {
@@ -168,6 +160,10 @@ public class TableModel extends JFrame {
                                 user.setPhoneno(phoneno);
                                 UserDB.add(user);
                                 JOptionPane.showMessageDialog(this,"User" + username + " is registered successfully");
+//                                remove(panel2);
+                                fr.setVisible(false);
+                                JFrame frame = new JFrame();
+                                PizzaDelivery pd = new PizzaDelivery(frame, username);
                         }
 				
                     });
@@ -248,6 +244,7 @@ public class TableModel extends JFrame {
 			//add all elements to panel before setting frame as visible
                         fr.add(panel2);
 			fr.setVisible(true);
+                        
 		
     }
     
